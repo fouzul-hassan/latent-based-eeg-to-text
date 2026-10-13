@@ -1,0 +1,45 @@
+{
+  "ablation": "A1",
+  "description": "Random-init encoder linear probe (lower bound)",
+  "timestamp": "2026-04-24T03:13:26.493464",
+  "config": {
+    "in_len": 1280,
+    "in_dim": 128,
+    "emb_size": 256,
+    "n_blocks": 8,
+    "num_heads": 16,
+    "patch_size": 8,
+    "mask_ratio": 0.7,
+    "momentum": 0.99,
+    "use_gated_attention": false
+  },
+  "n_parameters": 8161280,
+  "seed": 42,
+  "data": "E:\\MSc Files\\MSc Project\\gated-glim\\GLIM\\data\\tmp\\zuco_eeg_label_8variants.df",
+  "results": [
+    {
+      "task": "Subject ID Classification",
+      "n_classes": 30,
+      "train_acc": 0.8952423497878044,
+      "test_acc": 0.8670857656039515,
+      "random_baseline": 0.03333333333333333,
+      "improvement_over_random": 26.012572968118544
+    },
+    {
+      "task": "Sentiment Classification",
+      "n_classes": 3,
+      "train_acc": 0.4505428226779252,
+      "test_acc": 0.302158273381295,
+      "random_baseline": 0.3333333333333333,
+      "improvement_over_random": 0.9064748201438849
+    },
+    {
+      "task": "Relation Classification",
+      "n_classes": 9,
+      "train_acc": 0.421600287047004,
+      "test_acc": 0.3296032553407935,
+      "random_baseline": 0.1111111111111111,
+      "improvement_over_random": 2.9664292980671414
+    }
+  ]
+}

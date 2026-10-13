@@ -41,14 +41,15 @@ trainer = L.Trainer(accelerator = 'gpu',
                     devices = devices,
                     logger = logger,
                     max_epochs = 200,
-                    precision = 'bf16-mixed', 
+                    precision = 'bf16-mixed',
                     enable_checkpointing = True,
                     callbacks = callbacks,
                     use_distributed_sampler=False,
-                    num_sanity_val_steps = 0,   
+                    num_sanity_val_steps = 0,
+                    strict_loading = False,     # T5 weights not in ckpt; allow partial restore
                     # log_every_n_steps=49,  # NOTE
                     # limit_train_batches=2,
-                    # limit_val_batches=2,        
+                    # limit_val_batches=2,
                     )
 # print('\U0001F60B'*10)
 
@@ -74,7 +75,7 @@ model = GLIM(input_eeg_len = 1280,
              in_temporal_modulate = True,
              out_is_causal = True,
              # Gated Attention (NeurIPS 2025 Best Paper)
-             use_gated_attention = True,
+             use_gated_attention = False,
              gating_type = 'elementwise',  # 'elementwise' or 'headwise'
              # Loss Configuration
              prompt_tuning_len = 0,
@@ -116,5 +117,6 @@ else:
     print("   Training from scratch (no pretraining)")
 # =========================================
 
-trainer.fit(model, datamodule=dm)
+RESUME_CKPT = './runs/dev-dist/wandb/run-20260809_114002-v1pkxohf/files-checkpoints/epoch=139-step=278320.ckpt'
+trainer.fit(model, datamodule=dm, ckpt_path=RESUME_CKPT if os.path.exists(RESUME_CKPT) else None)
 

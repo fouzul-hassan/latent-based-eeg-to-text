@@ -1,0 +1,64 @@
+{
+  "task": "sentiment",
+  "n_train": 320,
+  "n_val": 40,
+  "n_test": 40,
+  "label_names": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "train_distribution": {
+    "neutral": 104,
+    "negative": 103,
+    "positive": 113
+  },
+  "val_distribution": {
+    "positive": 16,
+    "neutral": 16,
+    "negative": 8
+  },
+  "test_distribution": {
+    "negative": 12,
+    "neutral": 17,
+    "positive": 11
+  },
+  "chance_baseline": 0.3333333333333333,
+  "timestamp": "2026-04-26 18:03:49",
+  "tfidf_lr_val": {
+    "accuracy": 0.475,
+    "f1_macro": 0.4465329991645781,
+    "f1_macro_all": 0.4465329991645781,
+    "f1_weighted": 0.4726817042606516,
+    "classification_report": "              precision    recall  f1-score   support\n\n    negative       0.27      0.38      0.32         8\n     neutral       0.42      0.31      0.36        16\n    positive       0.65      0.69      0.67        16\n\n    accuracy                           0.47        40\n   macro avg       0.45      0.46      0.45        40\nweighted avg       0.48      0.47      0.47        40\n",
+    "classes_with_zero_support": []
+  },
+  "tfidf_lr_test": {
+    "accuracy": 0.5,
+    "f1_macro": 0.4875,
+    "f1_macro_all": 0.4875,
+    "f1_weighted": 0.4871875,
+    "classification_report": "              precision    recall  f1-score   support\n\n    negative       0.50      0.33      0.40        12\n     neutral       0.64      0.41      0.50        17\n    positive       0.43      0.82      0.56        11\n\n    accuracy                           0.50        40\n   macro avg       0.52      0.52      0.49        40\nweighted avg       0.54      0.50      0.49        40\n",
+    "classes_with_zero_support": []
+  },
+  "zero_shot_cosine": {
+    "accuracy": 0.3,
+    "f1_macro": 0.18669690098261527,
+    "f1_macro_all": 0.18669690098261527,
+    "f1_weighted": 0.1819160997732426,
+    "classification_report": "              precision    recall  f1-score   support\n\n    negative       0.30      0.92      0.45        12\n     neutral       1.00      0.06      0.11        17\n    positive       0.00      0.00      0.00        11\n\n    accuracy                           0.30        40\n   macro avg       0.43      0.33      0.19        40\nweighted avg       0.51      0.30      0.18        40\n",
+    "classes_with_zero_support": []
+  },
+  "finetuned_deberta": {
+    "accuracy": 0.3,
+    "f1_macro": 0.15384615384615385,
+    "f1_macro_all": 0.15384615384615385,
+    "f1_weighted": 0.13846153846153847,
+    "classification_report": "              precision    recall  f1-score   support\n\n    negative       0.30      1.00      0.46        12\n     neutral       0.00      0.00      0.00        17\n    positive       0.00      0.00      0.00        11\n\n    accuracy                           0.30        40\n   macro avg       0.10      0.33      0.15        40\nweighted avg       0.09      0.30      0.14        40\n",
+    "classes_with_zero_support": []
+  },
+  "benchmarking": {
+    "skipped": true,
+    "reason": "No valid sentiment labels in benchmarking set"
+  }
+}

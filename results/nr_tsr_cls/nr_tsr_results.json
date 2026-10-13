@@ -1,0 +1,46 @@
+{
+  "task": "NR_vs_TSR",
+  "chance_baseline": 0.5,
+  "n_total": 1556,
+  "distribution": {
+    "NR": 989,
+    "TSR": 567
+  },
+  "note": "NR includes task1 (movie reviews) and task2 (Wikipedia biographies). TSR is task3 (Wikipedia biographies, comprehension questions). task2 vs task3 is the hardest setting: same text type, different paradigm.",
+  "full_nr_vs_tsr": {
+    "mean_acc": 0.7345762222771869,
+    "std_acc": 0.01731825724177763,
+    "mean_f1_macro": 0.7252172064939308,
+    "std_f1_macro": 0.017345741120387517,
+    "pooled": {
+      "accuracy": 0.7345758354755784,
+      "f1_macro": 0.7252278657942411,
+      "f1_weighted": 0.7389729640713294,
+      "report": "              precision    recall  f1-score   support\n\n          NR       0.84      0.72      0.78       989\n         TSR       0.61      0.75      0.67       567\n\n    accuracy                           0.73      1556\n   macro avg       0.72      0.74      0.73      1556\nweighted avg       0.75      0.73      0.74      1556\n"
+    }
+  },
+  "task1_nr_vs_task3_tsr": {
+    "mean_acc": 0.9721008493136051,
+    "std_acc": 0.020784966382491627,
+    "mean_f1_macro": 0.971258829834882,
+    "std_f1_macro": 0.021492007783015653,
+    "pooled": {
+      "accuracy": 0.9720785935884177,
+      "f1_macro": 0.9712723291650391,
+      "f1_weighted": 0.972103478292843,
+      "report": "              precision    recall  f1-score   support\n\n          NR       0.96      0.97      0.97       400\n         TSR       0.98      0.97      0.98       567\n\n    accuracy                           0.97       967\n   macro avg       0.97      0.97      0.97       967\nweighted avg       0.97      0.97      0.97       967\n"
+    }
+  },
+  "task2_nr_vs_task3_tsr": {
+    "mean_acc": 0.6660732945215704,
+    "std_acc": 0.02134179901657216,
+    "mean_f1_macro": 0.6655613389414362,
+    "std_f1_macro": 0.021534839799143776,
+    "pooled": {
+      "accuracy": 0.6660899653979239,
+      "f1_macro": 0.6659209679109953,
+      "f1_weighted": 0.6660639657845503,
+      "report": "              precision    recall  f1-score   support\n\n          NR       0.67      0.68      0.67       589\n         TSR       0.66      0.66      0.66       567\n\n    accuracy                           0.67      1156\n   macro avg       0.67      0.67      0.67      1156\nweighted avg       0.67      0.67      0.67      1156\n"
+    }
+  }
+}

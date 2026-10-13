@@ -345,12 +345,16 @@ class GLIM(L.LightningModule):
             assert logits.shape[0] >= self.bsz_retrieval
             logits = logits[:self.bsz_retrieval, :self.bsz_retrieval]  # NOTE
         bsz = logits.shape[0]
-        targets = torch.arange(bsz, dtype=torch.int, 
+        targets = torch.arange(bsz, dtype=torch.int,
                               device=self.device) if targets is None else targets # (n)
         probs = torch.softmax(logits, dim=-1)
-        acc_top1 = multiclass_accuracy(probs, targets, average='micro', num_classes=bsz, top_k=1)
-        acc_top5 = multiclass_accuracy(probs, targets, average='micro', num_classes=bsz, top_k=5)
-        acc_top10 = multiclass_accuracy(probs, targets, average='micro', num_classes=bsz, top_k=10)
+        # top_k must not exceed num_classes (bsz); clamp to guarantee ACC@K monotonicity
+        k1  = min(1,  bsz)
+        k5  = min(5,  bsz)
+        k10 = min(10, bsz)
+        acc_top1  = multiclass_accuracy(probs, targets, average='micro', num_classes=bsz, top_k=k1)
+        acc_top5  = multiclass_accuracy(probs, targets, average='micro', num_classes=bsz, top_k=k5)
+        acc_top10 = multiclass_accuracy(probs, targets, average='micro', num_classes=bsz, top_k=k10)
         return {'retrieval_acc_top01': acc_top1,
                 'retrieval_acc_top05': acc_top5,
                 'retrieval_acc_top10': acc_top10,
@@ -895,7 +899,6 @@ class GLIM(L.LightningModule):
         
         metrics = ({f'test/{k}-batch{batch_idx}':v for k, v in metrics.items()})
         self.log_dict(metrics, sync_dist=True, batch_size=self.bsz_retrieval)
-        self.full_val_step(shared_outputs)
         outputs = self.full_val_step(shared_outputs)
         self.test_step_outputs.append(outputs)
 

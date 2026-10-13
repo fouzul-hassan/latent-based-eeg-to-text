@@ -1,0 +1,31 @@
+{
+  "task": "corpus",
+  "n_samples": 2208,
+  "label_names": [
+    "movie review",
+    "life / relationship"
+  ],
+  "label_distribution": {
+    "movie review": 417,
+    "life / relationship": 1791
+  },
+  "chance_baseline": 0.5,
+  "timestamp": "2026-04-26 02:30:06",
+  "tfidf_lr": {
+    "cv_acc_mean": 1.0,
+    "cv_acc_std": 0.0,
+    "cv_f1_mean": 1.0,
+    "cv_f1_std": 0.0
+  },
+  "zero_shot_cosine": {
+    "top1_acc": 0.644927536231884,
+    "top1_f1_macro": 0.4734644416217716,
+    "classification_report": "                     precision    recall  f1-score   support\n\n       movie review       0.15      0.20      0.17       417\nlife / relationship       0.80      0.75      0.77      1791\n\n           accuracy                           0.64      2208\n          macro avg       0.48      0.47      0.47      2208\n       weighted avg       0.68      0.64      0.66      2208\n"
+  },
+  "finetuned_deberta": {
+    "top1_acc": 0.8122171945701357,
+    "top1_f1_macro": 0.44818976279650435,
+    "classification_report": "                     precision    recall  f1-score   support\n\n       movie review       0.00      0.00      0.00        83\nlife / relationship       0.81      1.00      0.90       359\n\n           accuracy                           0.81       442\n          macro avg       0.41      0.50      0.45       442\n       weighted avg       0.66      0.81      0.73       442\n",
+    "best_top1_acc": 0.8122171945701357
+  }
+}

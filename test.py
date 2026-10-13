@@ -48,7 +48,7 @@ if __name__ == '__main__':
                         )
 
     model = GLIM.load_from_checkpoint(
-        "runs/v0/glim-zuco-epoch=199-step=49600.ckpt",
+        "runs/dev-dist/wandb/run-20260809_114002-v1pkxohf/files-checkpoints/epoch=139-step=278320.ckpt",
         map_location = f"cuda:{devices[0]}",
         strict = False,
         weights_only = False,

@@ -324,7 +324,6 @@ def main():
           f"patch_size={actual_patch_size}, "
           f"num_heads={ckpt_args.get('num_heads', 8)}")
 
-    # ── Create model ──
     model = GLIMEncoderPretrainer(
         in_len=1280,
         in_dim=128,
@@ -335,6 +334,7 @@ def main():
         mask_ratio=ckpt_args.get('mask_ratio', 0.5),
         momentum=ckpt_args.get('momentum', 0.99),
         use_gated_attention=ckpt_args.get('use_gated_attention', False),
+        pretraining_mode=ckpt_args.get('pretraining_mode', 'jepa'),
     ).to(device)
 
     model.load_state_dict(ckpt['model_state_dict'])
@@ -463,23 +463,23 @@ def main():
         print(f"  {r['task']:<30} {100*r['test_acc']:>9.1f}% {100*r['random_baseline']:>9.1f}% {r['improvement_over_random']:>9.1f}×")
 
     # Verdict
-    print(f"\n  🎯 Verdict:")
-    avg_improvement = np.mean([r['improvement_over_random'] for r in results])
-    if avg_improvement > 2.0:
-        print(f"  ✅ GOOD: Encoder learned meaningful, multi-aspect EEG features (avg {avg_improvement:.1f}× random)")
-    elif avg_improvement > 1.5:
-        print(f"  ✅ DECENT: Encoder captures some discriminative patterns (avg {avg_improvement:.1f}× random)")
-    else:
-        print(f"  ⚠️ MODEST: Features are marginally better than random (avg {avg_improvement:.1f}× random)")
+    # print(f"\n  🎯 Verdict:")
+    # avg_improvement = np.mean([r['improvement_over_random'] for r in results])
+    # if avg_improvement > 2.0:
+    #     print(f"  ✅ GOOD: Encoder learned meaningful, multi-aspect EEG features (avg {avg_improvement:.1f}× random)")
+    # elif avg_improvement > 1.5:
+    #     print(f"  ✅ DECENT: Encoder captures some discriminative patterns (avg {avg_improvement:.1f}× random)")
+    # else:
+    #     print(f"  ⚠️ MODEST: Features are marginally better than random (avg {avg_improvement:.1f}× random)")
 
-    semantic_tasks = [r for r in results if r['task'] != 'Subject ID Classification']
-    if semantic_tasks:
-        avg_semantic = np.mean([r['improvement_over_random'] for r in semantic_tasks])
-        if avg_semantic > 1.5:
-            print(f"  ✅ Semantic probes ({avg_semantic:.1f}× random) show the encoder captures MEANING from EEG!")
-            print(f"     This directly supports the world model hypothesis.")
-        else:
-            print(f"  ⚠️ Semantic probes ({avg_semantic:.1f}× random) show limited semantic capture.")
+    # semantic_tasks = [r for r in results if r['task'] != 'Subject ID Classification']
+    # if semantic_tasks:
+    #     avg_semantic = np.mean([r['improvement_over_random'] for r in semantic_tasks])
+    #     if avg_semantic > 1.5:
+    #         print(f"  ✅ Semantic probes ({avg_semantic:.1f}× random) show the encoder captures MEANING from EEG!")
+    #         print(f"     This directly supports the world model hypothesis.")
+    #     else:
+    #         print(f"  ⚠️ Semantic probes ({avg_semantic:.1f}× random) show limited semantic capture.")
 
     print("=" * 60)
 

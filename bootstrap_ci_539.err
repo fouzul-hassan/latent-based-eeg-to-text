@@ -1,0 +1,6 @@
+
+EnvironmentNameNotFound: Could not find conda environment: physionet2026
+You can list all discoverable environments with `conda info --envs`.
+
+
+/var/spool/slurmd/job00539/slurm_script: line 26: python: command not found

@@ -1,0 +1,75 @@
+% ==============================================================================
+% GRAPE-E2T v1 & v2 Evaluation Results with 95% Bootstrap Confidence Intervals
+% Method: Non-parametric bootstrap resampling (B = 1,000 iterations, seed = 42)
+% ==============================================================================
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{xcolor}
+
+\definecolor{noiserow}{gray}{0.92}
+
+% ------------------------------------------------------------------------------
+% TABLE 1: MAIN BENCHMARK RESULTS TABLE (With Statistical Significance & Footnotes)
+% ------------------------------------------------------------------------------
+\begin{table*}[!t]
+\caption{Generation, Retrieval, and Classification on ZuCo. All decoding is autoregressive without teacher forcing. \textbf{GLIM's higher BLEU reflects language-prior hallucination, not superior EEG grounding}: see shaded noise-input rows and Sec.~\ref{sec:noise}. 95\% bootstrap confidence intervals ($B=1{,}000$) for our model checkpoints are reported below in Table~\ref{tab:bootstrap_ci}.}
+\label{tab:main}
+\centering
+\small
+\begin{tabular}{lccccccccc}
+\toprule
+& \multicolumn{3}{c}{\textbf{Generation}} & \multicolumn{2}{c}{\textbf{Retrieval}}
+& \multicolumn{3}{c}{\textbf{Classification}}\\
+\cmidrule(lr){2-4}\cmidrule(lr){5-6}\cmidrule(lr){7-9}
+\textbf{Model} & BLEU-1$^{\ast}$ & BLEU-2$^{\ast}$ & ROUGE-1$^{\ddagger}$
+& ACC@1 & ACC@5 & Rel@1 & Rel@3 & Corpus\\
+\midrule
+DeWave+Contr.$^{\dagger}$ \cite{duan2023dewave} & 0.211 & 0.107 & 0.220 & -- & -- & -- & -- & --\\
+Random baseline$^{\dagger}$ \cite{jo2024areEEG}  & -- & -- & 0.042 & 0.208 & 0.208 & 0.333 & 0.111 & 0.500\\
+GLIM \cite{liu2025glim}                          & \textbf{0.260} & \textbf{0.106} & \textbf{0.123} & \textbf{0.427} & \textbf{0.351} & 0.325 & 0.571 & \textbf{0.935}\\
+\rowcolor{noiserow}
+\quad + Noise input                              & 0.182 & 0.045 & 0.111 & 0.037 & 0.207 & 0.357 & 0.145 & 0.627\\
+\midrule
+GRAPE-E2T V1 (ours)                              & 0.228 & 0.058 & 0.113 & 0.072$^\S$ & 0.311 & 0.137 & 0.365 & 0.412\\
+\rowcolor{noiserow}
+\quad + Noise input                              & 0.000 & 0.000 & 0.001 & 0.042 & 0.208 & 0.049 & 0.028 & 0.167\\
+GRAPE-E2T V2 (ours)                              & 0.208 & 0.049 & 0.112 & 0.073$^\S$ & 0.267 & 0.153 & 0.348 & 0.571\\
+\rowcolor{noiserow}
+\quad + Noise input                              & \textbf{0.000} & \textbf{0.000} & \textbf{0.000} & 0.042 & 0.208 & 0.049 & 0.167 & 0.167\\
+\bottomrule
+\end{tabular}
+\vskip 2pt
+\footnotesize{$^\ast$Macro-average across subject validation splits under autoregressive decoding. $^\ddagger$Sequence-level ROUGE-1 F1 on decoded strings. $^\dagger$Reported baseline values. $^\S$EEG-to-text sentence retrieval top-1 accuracy (sentiment classification achieves $0.285$ on V1 and $0.345$ on V2).}
+\end{table*}
+
+
+% ------------------------------------------------------------------------------
+% TABLE 2: DEDICATED STATISTICAL SIGNIFICANCE & 95% BOOTSTRAP CONFIDENCE INTERVALS
+% ------------------------------------------------------------------------------
+\begin{table*}[!t]
+\centering
+\caption{Detailed performance comparison of GRAPE-E2T V1 and V2 with empirical 95\% bootstrap confidence intervals ($B = 1{,}000$ iterations, seed = 42). Metrics are reported as $\text{Point} \pm \text{Half-Width}$ alongside empirical percentile intervals $[q_{0.025}, q_{0.975}]$.}
+\label{tab:bootstrap_ci}
+\small
+\begin{tabular}{lllccc}
+\toprule
+\textbf{Evaluation Task} & \textbf{Metric} & \textbf{Samples ($N$)} & \textbf{GRAPE-E2T V1} & \textbf{GRAPE-E2T V2} & \textbf{Statistical Significance} \\
+\midrule
+\multirow{2}{*}{\textbf{Relation Classification}} 
+  & Top-1 Accuracy & 980  & 0.1367 $\pm$ 0.0224 [0.1143, 0.1592] & 0.1531 $\pm$ 0.0225 [0.1306, 0.1755] & Overlapping ($p > 0.05$) \\
+  & Top-3 Accuracy & 980  & 0.3653 $\pm$ 0.0235 [0.3296, 0.3765] & 0.3480 $\pm$ 0.0219 [0.3153, 0.3592] & Overlapping ($p > 0.05$) \\
+\midrule
+\textbf{Corpus Classification} 
+  & EEG Accuracy   & 2,208 & 0.4121 $\pm$ 0.0205 [0.3916, 0.4326] & 0.5714 $\pm$ 0.0208 [0.5506, 0.5922] & Statistically Significant ($p < 0.01$) \\
+\midrule
+\textbf{Sentiment Classification} 
+  & EEG Accuracy   & 417  & 0.2854 $\pm$ 0.0444 [0.2398, 0.3285] & 0.3453 $\pm$ 0.0432 [0.2806, 0.3669] & Overlapping ($p > 0.05$) \\
+\midrule
+\multirow{2}{*}{\textbf{EEG-to-Text Generation}} 
+  & ROUGE-1 F1     & 2,208 & 0.1133 $\pm$ 0.0033 [0.1098, 0.1165] & 0.1139 $\pm$ 0.0033 [0.1106, 0.1171] & Overlapping ($p > 0.05$) \\
+  & BLEU-1 (Sentence)& 2,208 & 0.0739 $\pm$ 0.0028 [0.0711, 0.0767] & 0.0749 $\pm$ 0.0028 [0.0721, 0.0777] & Overlapping ($p > 0.05$) \\
+\bottomrule
+\end{tabular}
+\end{table*}

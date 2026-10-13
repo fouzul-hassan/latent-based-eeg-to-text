@@ -31,7 +31,7 @@ RELATION_LABELS   = ['awarding', 'education', 'employment', 'foundation',
                      'job title', 'nationality', 'political affiliation', 'visit', 'marriage']
 CORPUS_LABELS     = ["The topic is about: movie, good or bad",
                      "The topic is about: life experiences, relationship"]
-CORPUS_DISPLAY    = ['movie review', 'biography']
+CORPUS_DISPLAY    = ['movie review', 'life / relationship']
 PARADIGM_LABELS   = ["Normal reading: the participant reads sentences for general comprehension",
                      "Task-specific reading: the participant reads sentences to extract semantic relations"]
 PARADIGM_DISPLAY  = ['NR', 'TSR']

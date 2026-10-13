@@ -94,3 +94,7 @@ ablations/STATUS.md
 ablations/logs/*
 
 
+
+# ablation checkpoints and wandb logs (large)
+runs/**/*.pth
+runs/**/wandb/

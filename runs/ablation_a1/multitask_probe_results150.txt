@@ -1,0 +1,38 @@
+Multi-Task Linear Probe Results
+==================================================
+
+Task: Subject ID Classification
+  Classes: 30
+  Train acc: 98.9%
+  Test acc:  96.4%
+  Random:    3.3%
+  vs Random: 28.9×
+
+Task: Sentiment Classification
+  Classes: 3
+  Train acc: 47.3%
+  Test acc:  31.4%
+  Random:    33.3%
+  vs Random: 0.9×
+
+Task: Relation Classification
+  Classes: 9
+  Train acc: 42.5%
+  Test acc:  33.7%
+  Random:    11.1%
+  vs Random: 3.0×
+
+Task: Paradigm (NR vs TSR) - No SST
+  Classes: 2
+  Train acc: 70.5%
+  Test acc:  67.8%
+  Random:    50.0%
+  vs Random: 1.4×
+
+Task: Paradigm (NR vs TSR) - WIth SST
+  Classes: 2
+  Train acc: 69.3%
+  Test acc:  67.9%
+  Random:    50.0%
+  vs Random: 1.4×
+

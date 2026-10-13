@@ -1,0 +1,43 @@
+03:11:25 | ============================================================
+03:11:25 |   A1 — Random-Initialised Encoder Linear Probe
+03:11:25 | ============================================================
+03:11:25 |   Timestamp : 2026-04-24T03:11:25.669256
+03:11:25 |   Log dir   : E:\MSc Files\MSc Project\gated-glim\GLIM\ablations\logs\a1
+03:11:25 |   Data      : E:\MSc Files\MSc Project\gated-glim\GLIM\data\tmp\zuco_eeg_label_8variants.df
+03:11:25 |   Seed      : 42
+03:11:25 |   Config    : Pretrain5 (8-block, 256-dim, 16-head)
+03:11:25 | ============================================================
+03:11:26 |   Device    : cuda:0
+03:11:26 | 
+  Creating GLIMEncoderPretrainer with RANDOM weights...
+03:11:26 |   Parameters: 8,161,280
+03:11:26 |   NOTE: No checkpoint loaded — weights are Xavier/Kaiming init.
+03:11:26 | 
+  Loading data from E:\MSc Files\MSc Project\gated-glim\GLIM\data\tmp\zuco_eeg_label_8variants.df
+03:11:49 |   Train: 17908 samples | Test: 2227 samples
+03:11:49 | 
+  Extracting features from RANDOM encoder...
+03:12:38 |   Feature shape: (17908, 256)
+03:12:38 | 
+  Feature Statistics:
+03:12:38 |     Dim      : 256
+03:12:38 |     Mean std : 0.2434
+03:12:38 |     Min std  : 0.0724
+03:12:38 |     OK: No feature collapse
+03:13:09 | 
+  Generating t-SNE and summary plots...
+03:13:26 | 
+============================================================
+03:13:26 |   A1 RESULTS — Random-Init Encoder
+03:13:26 | ============================================================
+03:13:26 |   Task                             Accuracy     Random  vs Random
+03:13:26 |   ------------------------------ ---------- ---------- ----------
+03:13:26 |   Subject ID Classification           86.7%       3.3%      26.0x
+03:13:26 |   Sentiment Classification            30.2%      33.3%       0.9x
+03:13:26 |   Relation Classification             33.0%      11.1%       3.0x
+03:13:26 | ============================================================
+03:13:26 | 
+  Saved: E:\MSc Files\MSc Project\gated-glim\GLIM\ablations\logs\a1\a1_random_init_probe_results.txt
+03:13:26 |   Saved: E:\MSc Files\MSc Project\gated-glim\GLIM\ablations\logs\a1\a1_results.json
+03:13:26 | 
+  A1 complete.

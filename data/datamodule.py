@@ -8,11 +8,14 @@ from typing import Literal, Iterator, Union
 from torch.utils.data import Dataset, DataLoader, DistributedSampler
 
 
+EEG_CONTROL = Literal['none', 'gaussian_noise', 'channel_shuffle', 'temporal_shuffle', 'phase_randomize', 'cross_subject']
+
 class GLIMDataModule(pl.LightningDataModule):
-    
-    def __init__(self, 
+
+    def __init__(self,
                  data_path: os.PathLike,
                  eval_noise_input: bool = False,
+                 eval_eeg_control: EEG_CONTROL = 'none',
                  bsz_train = 64,
                  bsz_val = 24,
                  bsz_test = 24,
@@ -22,12 +25,17 @@ class GLIMDataModule(pl.LightningDataModule):
         super().__init__()
         assert os.path.exists(data_path)
         self.data_path = data_path
-        self.eval_noise_input = eval_noise_input
+        # Legacy flag maps to gaussian_noise for backward compat
+        self.eval_eeg_control: EEG_CONTROL = 'gaussian_noise' if eval_noise_input else eval_eeg_control
         self.bsz_train = bsz_train
-        self.bsz_val = bsz_val  
+        self.bsz_val = bsz_val
         self.bsz_test = bsz_test
         self.test_set_key = test_set_key
         self.num_workers = num_workers
+
+    @property
+    def eval_noise_input(self) -> bool:
+        return self.eval_eeg_control == 'gaussian_noise'
 
     def prepare_data(self) -> None:
         return super().prepare_data()
@@ -41,10 +49,10 @@ class GLIMDataModule(pl.LightningDataModule):
         df = pd.read_pickle(self.data_path)
         if stage == "fit":
             self.train_set = ZuCoDataset(df, 'train')
-            self.val_set = ZuCoDataset(df, 'val', self.eval_noise_input)
+            self.val_set = ZuCoDataset(df, 'val', eeg_control=self.eval_eeg_control)
             self.n_target_text = self.val_set.n_target_text
         elif stage == "test":
-            self.test_set = ZuCoDataset(df, 'test', self.eval_noise_input)
+            self.test_set = ZuCoDataset(df, 'test', eeg_control=self.eval_eeg_control)
             self.n_target_text = self.test_set.n_target_text
         print(f'[Rank {local_rank}][{self.__class__.__name__}] running `setup()`...Done!','\U0001F60B'*3)
             
@@ -248,12 +256,16 @@ class ZuCoDataset(Dataset):
                  df: pd.DataFrame,
                  phase: Literal['train', 'val', 'test'],
                  eval_noise_input: bool = False,
+                 eeg_control: EEG_CONTROL = 'none',
                  ):
         # pt_target_keys = ['input text']
-        pt_target_keys = ['lexical simplification (v0)', 'lexical simplification (v1)', 
-                          'semantic clarity (v0)', 'semantic clarity (v1)', 
+        pt_target_keys = ['lexical simplification (v0)', 'lexical simplification (v1)',
+                          'semantic clarity (v0)', 'semantic clarity (v1)',
                           'syntax simplification (v0)', 'syntax simplification (v1)',
                           'naive rewritten', 'naive simplified']
+        # Legacy compat: bool flag maps to gaussian_noise
+        if eval_noise_input and eeg_control == 'none':
+            eeg_control = 'gaussian_noise'
         df = df[df['phase'] == phase]
         if phase == 'train':
             target_keys = pt_target_keys
@@ -265,22 +277,72 @@ class ZuCoDataset(Dataset):
             targets_tuple_list = [(text, ) for text in data['target text']]
         else:
             data = self.__fetch_from_df(df, "input text")
-            # Note: eval_noise_input handling is done later in the code
             target_lists = [df[key].values.tolist() for key in pt_target_keys]
             targets_tuple_list = list(zip(*target_lists))
         data.update({"all target texts": targets_tuple_list})
 
-        if eval_noise_input:
-            n = len(data['eeg'])
-            l,c = data['eeg'][0].shape
-            data.pop('eeg')
-            data.pop('mask')
-            rng = np.random.default_rng(seed=42)
-            data['eeg'] = rng.standard_normal((n,l,c), dtype=np.float32)
-            data['mask'] = np.ones((n,l), dtype=np.int8)
+        if eeg_control != 'none':
+            data = self._apply_eeg_control(data, eeg_control)
 
         self.n_target_text = len(pt_target_keys)
         self.data = data
+
+    @staticmethod
+    def _apply_eeg_control(data: dict, control: EEG_CONTROL) -> dict:
+        """Replace EEG signals with a controlled perturbation for ablation studies."""
+        rng = np.random.default_rng(seed=42)
+        eegs = data['eeg']          # list of (l, c) arrays
+        n = len(eegs)
+        l, c = eegs[0].shape
+
+        if control == 'gaussian_noise':
+            # i.i.d. Gaussian — zero semantic content, matched amplitude not guaranteed
+            data.pop('eeg'); data.pop('mask')
+            data['eeg']  = list(rng.standard_normal((n, l, c), dtype=np.float32))
+            data['mask'] = [np.ones(l, dtype=np.int8)] * n
+
+        elif control == 'channel_shuffle':
+            # Permute electrode labels: preserves temporal dynamics, destroys spatial topology
+            perm = rng.permutation(c)
+            data['eeg'] = [e[:, perm] for e in eegs]
+
+        elif control == 'temporal_shuffle':
+            # Shuffle time-windows of 10 samples within each trial; destroys temporal order
+            win = 10
+            n_wins = l // win
+            for i, e in enumerate(eegs):
+                e2 = e[:n_wins * win].reshape(n_wins, win, c)
+                idx = rng.permutation(n_wins)
+                data['eeg'][i] = np.concatenate([e2[idx].reshape(n_wins * win, c),
+                                                  e[n_wins * win:]], axis=0)
+
+        elif control == 'phase_randomize':
+            # Randomise Fourier phase; preserves power spectrum but destroys temporal structure
+            eeg_arr = np.stack(eegs, axis=0)      # (n, l, c)
+            F = np.fft.rfft(eeg_arr, axis=1)
+            phases = rng.uniform(0, 2 * np.pi, F.shape).astype(np.float32)
+            F_rand = np.abs(F) * np.exp(1j * phases)
+            eeg_arr = np.fft.irfft(F_rand, n=l, axis=1).astype(np.float32)
+            data['eeg'] = [eeg_arr[i] for i in range(n)]
+
+        elif control == 'cross_subject':
+            # Replace each trial's EEG with another subject's EEG for the SAME sentence;
+            # preserves sentence-level structure but destroys subject–sentence binding.
+            uid = data['text uid']           # list[int]
+            uid_arr = np.array(uid)
+            shuffled = list(range(n))
+            for i in range(n):
+                same_uid = np.where(uid_arr == uid_arr[i])[0]
+                candidates = [j for j in same_uid if j != i]
+                if candidates:
+                    shuffled[i] = rng.choice(candidates)
+                # if no other subject has the same uid, keep i (self-assignment)
+            data['eeg'] = [eegs[shuffled[i]] for i in range(n)]
+
+        else:
+            raise ValueError(f"Unknown eeg_control: {control!r}")
+
+        return data
         
     def __fetch_from_df(self, df, target_key):
         

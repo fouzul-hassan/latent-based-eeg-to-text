@@ -1,0 +1,44 @@
+{
+  "task": "relation",
+  "n_samples": 980,
+  "label_names": [
+    "awarding",
+    "education",
+    "employment",
+    "foundation",
+    "job title",
+    "nationality",
+    "political affiliation",
+    "visit",
+    "marriage"
+  ],
+  "label_distribution": {
+    "awarding": 70,
+    "education": 330,
+    "employment": 73,
+    "job title": 132,
+    "nationality": 199,
+    "visit": 73,
+    "marriage": 103
+  },
+  "chance_baseline": 0.1111111111111111,
+  "timestamp": "2026-04-26 02:29:46",
+  "tfidf_lr": {
+    "cv_acc_mean": 0.9775510204081632,
+    "cv_acc_std": 0.04489795918367348,
+    "cv_f1_mean": 0.9749659863945578,
+    "cv_f1_std": 0.050068027210884394
+  },
+  "zero_shot_cosine": {
+    "top1_acc": 0.03571428571428571,
+    "top1_f1_macro": 0.02736581920903955,
+    "classification_report": "                       precision    recall  f1-score   support\n\n             awarding       0.00      0.00      0.00        70\n            education       1.00      0.07      0.14       330\n           employment       0.00      0.00      0.00        73\n           foundation       0.00      0.00      0.00         0\n            job title       0.00      0.00      0.00       132\n          nationality       0.00      0.00      0.00       199\npolitical affiliation       0.00      0.00      0.00         0\n                visit       0.00      0.00      0.00        73\n             marriage       0.07      0.11      0.08       103\n\n             accuracy                           0.04       980\n            macro avg       0.12      0.02      0.02       980\n         weighted avg       0.34      0.04      0.05       980\n"
+  },
+  "finetuned_deberta": {
+    "top1_acc": 0.07142857142857142,
+    "top1_f1_macro": 0.019047619047619046,
+    "top3_acc": 0.2193877551020408,
+    "classification_report": "                       precision    recall  f1-score   support\n\n             awarding       0.07      1.00      0.13        14\n            education       0.00      0.00      0.00        66\n           employment       0.00      0.00      0.00        15\n           foundation       0.00      0.00      0.00         0\n            job title       0.00      0.00      0.00        26\n          nationality       0.00      0.00      0.00        40\npolitical affiliation       0.00      0.00      0.00         0\n                visit       0.00      0.00      0.00        14\n             marriage       0.00      0.00      0.00        21\n\n             accuracy                           0.07       196\n            macro avg       0.01      0.11      0.01       196\n         weighted avg       0.01      0.07      0.01       196\n",
+    "best_top1_acc": 0.07142857142857142
+  }
+}

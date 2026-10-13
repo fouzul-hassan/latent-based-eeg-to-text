@@ -1,0 +1,74 @@
+=== Bootstrap CI v2 Starting ===
+Job ID: 542  Node: iit-MS-7E06  Date: Mon Sep 28 14:33:16 +0530 2026
+Python: /shared/users/hassan2/envs/physionet2026/bin/python3
+Python 3.10.20
+
+============================================================
+  Bootstrap CI  (1000 iterations, seed=42)
+  eval_dir: /mnt/nvme_storage/shared/users/hassan2/grape/GLIM/evaluations
+  versions: ['v2']
+============================================================
+
+
+────────────────────────────────────────────────────────────
+  Processing: v2
+────────────────────────────────────────────────────────────
+
+[v2] corpus: corpus_predictions (1).pkl
+  2208 samples
+  → evaluations/v2/bootstrap_corpus_results.txt
+
+[v2] sentiment: sentiment_predictions (1).pkl
+  2208 samples
+  → evaluations/v2/bootstrap_sentiment_results.txt
+
+[v2] relation: relation_predictions (1).pkl
+  2208 samples
+  → evaluations/v2/bootstrap_relation_results.txt
+
+  → JSON: evaluations/v2/bootstrap_ci_results.json
+
+==========================================================================================================
+  BOOTSTRAP CI SUMMARY  —  95% Confidence Intervals (1,000 iterations)
+==========================================================================================================
+  Metric                                                                v2
+----------------------------------------------------------------------------------------------------------
+
+  TABLE 4 — CORPUS
+
+  TABLE 5 — SENTIMENT
+    EEG Accuracy                                           0.2854 ± 0.0444
+    Text Acc (Raw)                                         0.2854 ± 0.0444
+    Text Acc (Gen)                                         0.2854 ± 0.0444
+
+  TABLE 6 — RELATION
+    EEG Acc (Top-1)                                        0.1367 ± 0.0224
+    EEG Acc (Top-3)                                        0.1367 ± 0.0219
+    EEG Acc (Top-5)                                        0.1367 ± 0.0209
+
+  TABLE 4 — CORPUS GEN
+    BLEU-1                                                 0.0739 ± 0.0028
+    BLEU-2                                                 0.0091 ± 0.0013
+    BLEU-3                                                 0.0010 ± 0.0004
+    BLEU-4                                                 0.0002 ± 0.0002
+    ROUGE-1 F                                              0.1133 ± 0.0033
+
+  TABLE 5 — SENTIMENT GEN
+    BLEU-1                                                 0.0739 ± 0.0028
+    BLEU-2                                                 0.0091 ± 0.0013
+    BLEU-3                                                 0.0010 ± 0.0004
+    BLEU-4                                                 0.0002 ± 0.0002
+    ROUGE-1 F                                              0.1133 ± 0.0034
+
+  TABLE 6 — RELATION GEN
+    BLEU-1                                                 0.0739 ± 0.0028
+    BLEU-2                                                 0.0091 ± 0.0014
+    BLEU-3                                                 0.0010 ± 0.0004
+    BLEU-4                                                 0.0002 ± 0.0002
+    ROUGE-1 F                                              0.1133 ± 0.0033
+
+==========================================================================================================
+
+Combined JSON: evaluations/bootstrap_ci_combined.json
+
+=== v2 Done: Mon Sep 28 14:33:23 +0530 2026 ===

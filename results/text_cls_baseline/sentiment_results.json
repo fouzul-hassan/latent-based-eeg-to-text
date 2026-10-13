@@ -1,0 +1,33 @@
+{
+  "task": "sentiment",
+  "n_samples": 417,
+  "label_names": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "label_distribution": {
+    "negative": 121,
+    "neutral": 181,
+    "positive": 115
+  },
+  "chance_baseline": 0.3333333333333333,
+  "timestamp": "2026-04-26 02:29:35",
+  "tfidf_lr": {
+    "cv_acc_mean": 1.0,
+    "cv_acc_std": 0.0,
+    "cv_f1_mean": 1.0,
+    "cv_f1_std": 0.0
+  },
+  "zero_shot_cosine": {
+    "top1_acc": 0.290167865707434,
+    "top1_f1_macro": 0.18620509327112966,
+    "classification_report": "              precision    recall  f1-score   support\n\n    negative       0.29      0.90      0.43       121\n     neutral       1.00      0.07      0.12       181\n    positive       0.00      0.00      0.00       115\n\n    accuracy                           0.29       417\n   macro avg       0.43      0.32      0.19       417\nweighted avg       0.52      0.29      0.18       417\n"
+  },
+  "finetuned_deberta": {
+    "top1_acc": 0.44047619047619047,
+    "top1_f1_macro": 0.20385674931129474,
+    "classification_report": "              precision    recall  f1-score   support\n\n    negative       0.00      0.00      0.00        24\n     neutral       0.44      1.00      0.61        37\n    positive       0.00      0.00      0.00        23\n\n    accuracy                           0.44        84\n   macro avg       0.15      0.33      0.20        84\nweighted avg       0.19      0.44      0.27        84\n",
+    "best_top1_acc": 0.44047619047619047
+  }
+}
